@@ -1,8 +1,11 @@
-//Imports
+//Standard libraries
 #include <iostream>
 #include <string>
 #include <vector>
 #include <stdexcept>
+
+//Include header files for pricing model classes
+#include "BlackScholes.h"
 
 using namespace std;
 
@@ -21,9 +24,6 @@ int main(int argc, char* argv[])
 
     //"model_choice" is integer that will be determined by cin user input for choice of pricing model
     int model_choice;
-    
-    //"selected_model" is the string that will be defined by which model is selected
-    string selected_model;
 
     //Main loop
     while (running) {
@@ -64,13 +64,14 @@ int main(int argc, char* argv[])
             //Check if the model choice integer is less than or equal to the amount of options available
             if (model_choice <= models.size()) {
 
-                //Define "selected_model" string
-                selected_model = models[model_choice - 1];
+                if (model_choice == 1) {
+                    cout << "You have selected Black-Scholes" << endl;
 
-                //Print out selected model choice
-                cout << selected_model << endl;
+                    BlackScholes bs_obj;
+                    bs_obj.displayInputs();
 
-                //Break the loop
+                }
+
                 break;
             }
 
