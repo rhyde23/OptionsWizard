@@ -1,4 +1,4 @@
-//Import iostream
+//Imports
 #include <iostream>
 #include <string>
 #include <vector>
@@ -21,53 +21,76 @@ int main(int argc, char* argv[])
 
     //"model_choice" is integer that will be determined by cin user input for choice of pricing model
     int model_choice;
-
+    
+    //"selected_model" is the string that will be defined by which model is selected
     string selected_model;
 
-    //main loop
+    //Main loop
     while (running) {
 
         //Menu
-       
-
+        //Try to take valid user input
         try {
+
+            //Enter message
             cout << "Enter a number to select one of the following pricing models" << endl;
 
+            //For loop to print out all options
             for (int i = 1; i <= models.size(); ++i) {
+                
+                //Print the number assigned to this option
                 cout << i;
+                
+                //Print out the model name
                 cout << ": " + models[i - 1] << endl;
             }
 
-            cout << ">> ";
-
+            //Get user input
+            cout << "\n>> ";
             cin >> model_choice;
+            cout << "" << endl;
 
-            // Check for input failure
+            //Check for input failure (not valid integer)
             if (cin.fail()) {
                 throw invalid_argument("Invalid input. Not an integer.");
             }
 
-            // Clear the error state if input is valid
+            //Clear the error state if input is valid
             cin.clear();
-            cin.ignore(10000, '\n'); // Discard invalid input up to 10,000 characters
 
-            // If we reach this point, the input is an integer
+            // Discard invalid input
+            cin.ignore(10000, '\n');
 
+            //Check if the model choice integer is less than or equal to the amount of options available
             if (model_choice <= models.size()) {
+
+                //Define "selected_model" string
                 selected_model = models[model_choice - 1];
+
+                //Print out selected model choice
                 cout << selected_model << endl;
-                break; // Exit the loop
+
+                //Break the loop
+                break;
             }
+
+            //If the model choice integer is too large
             else {
+
+                //Display error message
                 cout << "Invalid input. Enter a number between 1 and ";
                 cout << models.size() << endl;
                 cout << "" << endl;
             }
         }
+
+        //If the input is not a valid integer
         catch (const invalid_argument& e) {
-            cout << e.what() << std::endl; // Display the error message
-            cin.clear(); // Clear the error flag
-            cin.ignore(10000, '\n'); // Discard invalid input
+
+            //Display error message
+            cout << e.what() << endl;
+            cin.clear(); 
+            cin.ignore(10000, '\n');
         }
     }
 
