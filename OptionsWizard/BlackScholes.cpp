@@ -1,11 +1,14 @@
+//Include header file
 #include "BlackScholes.h"
 #include <iostream>
 
 using namespace std;
 
+//Constructor - cin user inputs
 BlackScholes::BlackScholes() {
+
     cout << "Enter spot price: ";
-    cin >> spotPrice;
+    cin >> spotPriceOfUnderlying;
 
     cout << "Enter strike price: ";
     cin >> strikePrice;
@@ -16,14 +19,18 @@ BlackScholes::BlackScholes() {
     cout << "Enter years to maturity: ";
     cin >> yearsToMaturity;
 
-    cout << "Enter volatility: ";
-    cin >> volatility;
+    cout << "Enter volatility of underlying asset: ";
+    cin >> volatilityOfUnderlying;
 }
 
-void BlackScholes::displayInputs() const {
-    cout << "Spot Price: " << spotPrice << endl;
-    cout << "Strike Price: " << strikePrice << endl;
-    cout << "Interest Rate: " << interestRate << endl;
-    cout << "Years to Maturity: " << yearsToMaturity << endl;
-    cout << "Volatility: " << volatility << endl;
+double BlackScholes::getCallPrice() const {
+
+}
+
+double BlackScholes::getPutPrice() const {
+
+}
+
+double BlackScholes::getNormalDistribution() const {
+
 }
