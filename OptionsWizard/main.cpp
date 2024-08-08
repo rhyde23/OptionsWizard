@@ -7,9 +7,16 @@
 //Include header files for pricing model classes
 #include "BlackScholes.h"
 
+//Include SFML Graphics library
 #include "SFML/Graphics.hpp"
 
 using namespace std;
+
+//Define the "windowWidth" constant
+const int windowWidth = 800;
+
+//Define the "windowHeight" constant
+const int windowHeight = 800;
 
 //Main function
 int main(int argc, char* argv[])
@@ -97,15 +104,54 @@ int main(int argc, char* argv[])
         }
     }
     */
-    sf::RenderWindow window(sf::VideoMode(800, 800), "Test");
+    
+    //Create window object
+    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "OptionsWizard");
+
+    //Create event object for event handling such as window close
     sf::Event e;
 
+    //Create Arial font object for title text
+    sf::Font arialFont;
+
+    //Load the arial font file 
+    arialFont.loadFromFile("arial.ttf");
+
+    //Create a Text oject for the title text using the arial font
+    sf::Text title("OptionsWizard", arialFont, 30);
+
+    //Get the width of the text block
+    int textWidth = title.getLocalBounds().width;
+
+    //Set the position of the text at the top middle of the screen
+    title.setPosition((windowWidth-textWidth)/2, 10);
+
+    //Set the title text color to black
+    title.setFillColor(sf::Color::Black);
+
+    //Window loop
     while (window.isOpen()) {
+
+        //Event handling loop
         while (window.pollEvent(e)) {
+
+            //If the user is trying to close the window
             if (e.type == sf::Event::Closed) {
+
+                //Close the window
                 window.close();
             }
         }
+
+        //Set the background of the window to Red
+        window.clear(sf::Color::Red);
+
+        //Display the title
+        window.draw(title);
+
+        //Update the window display for this frame
+        window.display();
+
     }
 
     return 0;
