@@ -18,92 +18,82 @@ const int windowWidth = 800;
 //Define the "windowHeight" constant
 const int windowHeight = 800;
 
+//Input Box Class
+class InputBox {
+public:
+
+    //Constructor
+    InputBox(int x, int y, int width, int height) {
+
+        isActive = false;
+
+        box.setSize(sf::Vector2f(width, height));
+        box.setPosition(x, y);
+        box.setFillColor(sf::Color::White);
+        box.setOutlineThickness(2);
+        box.setOutlineColor(sf::Color::Black);
+
+        font.loadFromFile("arial.ttf");
+
+        text.setFont(font);
+
+        text.setPosition(x + 5, y + 5);
+        text.setFillColor(sf::Color::Black);
+        text.setCharacterSize(20);
+    }
+
+    void draw(sf::RenderWindow& window) {
+        window.draw(box);
+        window.draw(text);
+    }
+
+    void handleInput(sf::Event& event, const sf::RenderWindow& window) {
+        if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                cout << "ohno" << endl;
+                if (box.getGlobalBounds().contains(static_cast<int>(event.mouseButton.x), static_cast<int>(event.mouseButton.y))) {
+                    cout << "detected" << endl;
+                    isActive = true;
+                    box.setOutlineColor(sf::Color::Blue); // Highlight the active box
+                }
+                else {
+                    isActive = false;
+                    box.setOutlineColor(sf::Color::Black);
+                }
+            }
+        }
+
+        if (isActive && event.type == sf::Event::TextEntered) {
+            if (event.text.unicode == 8 && !userInput.empty()) {  // Backspace
+                userInput.pop_back();
+            }
+            else if (isAllowedCharacter(event.text.unicode)) {
+                userInput += static_cast<char>(event.text.unicode);
+            }
+            text.setString(userInput);
+        }
+    }
+
+private:
+    sf::RectangleShape box;
+    sf::Text text;
+    sf::Font font;
+    std::string userInput;
+    bool isActive;
+
+    bool isAllowedCharacter(sf::Uint32 unicode) {
+        // Check if the character is a number (0-9) or a period (.)
+        return (unicode >= '0' && unicode <= '9') || unicode == '.';
+    }
+};
+
+
+
+
+
 //Main function
 int main(int argc, char* argv[])
 {
-
-    /*
-    //Options Wizard title!
-    cout << "Options Wizard" << endl;
-
-    //"running" set to true if app is open
-    bool running = true;
-
-    //"models" is a vector of strings that contains the names of the choices of pricing models
-    vector<string> models{"Black-Scholes Model"};
-
-    //"model_choice" is integer that will be determined by cin user input for choice of pricing model
-    int model_choice;
-
-    //Main loop
-    while (running) {
-
-        //Menu
-        //Try to take valid user input
-        try {
-
-            //Enter message
-            cout << "Enter a number to select one of the following pricing models" << endl;
-
-            //For loop to print out all options
-            for (int i = 1; i <= models.size(); ++i) {
-                
-                //Print the number assigned to this option
-                cout << i;
-                
-                //Print out the model name
-                cout << ": " + models[i - 1] << endl;
-            }
-
-            //Get user input
-            cout << "\n>> ";
-            cin >> model_choice;
-            cout << "" << endl;
-
-            //Check for input failure (not valid integer)
-            if (cin.fail()) {
-                throw invalid_argument("Invalid input. Not an integer.");
-            }
-
-            //Clear the error state if input is valid
-            cin.clear();
-
-            // Discard invalid input
-            cin.ignore(10000, '\n');
-
-            //Check if the model choice integer is less than or equal to the amount of options available
-            if (model_choice <= models.size()) {
-
-                if (model_choice == 1) {
-                    cout << "You have selected Black-Scholes" << endl;
-
-                    BlackScholes bs_obj;
-
-                }
-
-                break;
-            }
-
-            //If the model choice integer is too large
-            else {
-
-                //Display error message
-                cout << "Invalid input. Enter a number between 1 and ";
-                cout << models.size() << endl;
-                cout << "" << endl;
-            }
-        }
-
-        //If the input is not a valid integer
-        catch (const invalid_argument& e) {
-
-            //Display error message
-            cout << e.what() << endl;
-            cin.clear(); 
-            cin.ignore(10000, '\n');
-        }
-    }
-    */
     
     //Create window object
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "OptionsWizard");
@@ -129,6 +119,8 @@ int main(int argc, char* argv[])
     //Set the title text color to black
     title.setFillColor(sf::Color::Black);
 
+    InputBox testInput(200, 200, 100, 20);
+
     //Window loop
     while (window.isOpen()) {
 
@@ -141,6 +133,9 @@ int main(int argc, char* argv[])
                 //Close the window
                 window.close();
             }
+
+            testInput.handleInput(e, window);
+
         }
 
         //Set the background of the window to Red
@@ -148,6 +143,8 @@ int main(int argc, char* argv[])
 
         //Display the title
         window.draw(title);
+
+        testInput.draw(window);
 
         //Update the window display for this frame
         window.display();
