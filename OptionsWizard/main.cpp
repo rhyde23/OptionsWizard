@@ -7,12 +7,15 @@
 //Include header files for pricing model classes
 #include "BlackScholes.h"
 
+#include "SFML/Graphics.hpp"
+
 using namespace std;
 
 //Main function
 int main(int argc, char* argv[])
 {
 
+    /*
     //Options Wizard title!
     cout << "Options Wizard" << endl;
 
@@ -68,7 +71,6 @@ int main(int argc, char* argv[])
                     cout << "You have selected Black-Scholes" << endl;
 
                     BlackScholes bs_obj;
-                    bs_obj.displayInputs();
 
                 }
 
@@ -92,6 +94,17 @@ int main(int argc, char* argv[])
             cout << e.what() << endl;
             cin.clear(); 
             cin.ignore(10000, '\n');
+        }
+    }
+    */
+    sf::RenderWindow window(sf::VideoMode(800, 800), "Test");
+    sf::Event e;
+
+    while (window.isOpen()) {
+        while (window.pollEvent(e)) {
+            if (e.type == sf::Event::Closed) {
+                window.close();
+            }
         }
     }
 

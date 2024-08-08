@@ -24,13 +24,13 @@ BlackScholes::BlackScholes() {
 }
 
 double BlackScholes::getCallPrice() const {
-
+    return 0;
 }
 
 double BlackScholes::getPutPrice() const {
-
+    return 0;
 }
 
 double BlackScholes::getNormalDistribution() const {
-
+    return 0;
 }
