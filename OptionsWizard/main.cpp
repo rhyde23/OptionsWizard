@@ -21,6 +21,9 @@ const int windowHeight = 800;
 //Define the "inputBoxOutlineThickness" constant
 const int inputBoxOutlineThickness = 3;
 
+//Create color object lightGray
+sf::Color lightGray(211, 211, 211);
+
 //Input Box Class
 class InputBox {
 public:
@@ -39,8 +42,8 @@ public:
         //Set the position of the box at the coordinate (x, y)
         box.setPosition(x, y);
 
-        //Set the color of the box to white
-        box.setFillColor(sf::Color::White);
+        //Set the color of the box to lightGray
+        box.setFillColor(lightGray);
 
         //Set an outline thickness
         box.setOutlineThickness(inputBoxOutlineThickness);
@@ -77,6 +80,23 @@ public:
     //Method for handling mouse button clicks in text fields and key presses
     void handleInput(sf::Event& event, const sf::RenderWindow& window) {
 
+
+        if (event.type == sf::Event::MouseMoved) {
+            if (box.getGlobalBounds().contains(static_cast<int>(event.mouseMove.x), static_cast<int>(event.mouseMove.y))) {
+                if (!isActive) {
+                    box.setFillColor(sf::Color::White); // Hover color
+                }
+            }
+            else {
+                if (!isActive) {
+                    box.setFillColor(lightGray); // Default color
+                }
+            }
+        }
+
+
+
+
         //If the mouse is pressed
         if (event.type == sf::Event::MouseButtonPressed) {
 
@@ -101,6 +121,9 @@ public:
 
                     //Highlight the box by setting the outline color to black
                     box.setOutlineColor(sf::Color::Black);
+
+
+                    box.setFillColor(lightGray);
                 }
             }
         }
@@ -159,6 +182,19 @@ int main(int argc, char* argv[])
     //Create window object
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "OptionsWizard");
 
+
+    sf::Texture menuImg;
+    menuImg.loadFromFile("menu.jpg");
+
+    sf::Sprite menuSprite;
+    menuSprite.setTexture(menuImg);
+
+
+    menuSprite.setPosition(10, 10);
+
+    menuSprite.setScale(0.1, 0.1);
+
+
     //Create event object for event handling such as window close
     sf::Event e;
 
@@ -208,6 +244,8 @@ int main(int argc, char* argv[])
 
         //Draw test input box
         testInput.draw(window);
+
+        window.draw(menuSprite);
 
         //Update the window display for this frame
         window.display();
