@@ -1,8 +1,8 @@
-//Standard libraries
-#include <iostream>
+//Incliude strings
 #include <string>
+
+//Include vectors
 #include <vector>
-#include <stdexcept>
 
 //Include header files for pricing model classes
 #include "BlackScholes.h"
@@ -18,71 +18,132 @@ const int windowWidth = 800;
 //Define the "windowHeight" constant
 const int windowHeight = 800;
 
+//Define the "inputBoxOutlineThickness" constant
+const int inputBoxOutlineThickness = 3;
+
 //Input Box Class
 class InputBox {
 public:
 
     //Constructor
+
+    //Takes in x-coordinate of input box, y-coordinate of input box, width of input box, and height of input box 
     InputBox(int x, int y, int width, int height) {
 
+        //Set the "isActive" to false by default
         isActive = false;
 
+        //Set the size of the box as a vector with the width and height from the Constructor
         box.setSize(sf::Vector2f(width, height));
+        
+        //Set the position of the box at the coordinate (x, y)
         box.setPosition(x, y);
+
+        //Set the color of the box to white
         box.setFillColor(sf::Color::White);
-        box.setOutlineThickness(2);
+
+        //Set an outline thickness
+        box.setOutlineThickness(inputBoxOutlineThickness);
+
+        //Set the box's outline color to black
         box.setOutlineColor(sf::Color::Black);
 
+        //Load the arial font file 
         font.loadFromFile("arial.ttf");
 
+        //Use the "setFont" method to set the font of this text object to arial
         text.setFont(font);
 
-        text.setPosition(x + 5, y + 5);
+        //Set the position of the text (change later)
+        text.setPosition(x, y);
+
+        //Set the color of the text to black
         text.setFillColor(sf::Color::Black);
+
+        //Set the character size of the text to 20
         text.setCharacterSize(20);
     }
 
+    //Draw method
     void draw(sf::RenderWindow& window) {
+
+        //Draw the input text box
         window.draw(box);
+
+        //Draw the inputted text 
         window.draw(text);
     }
 
+    //Method for handling mouse button clicks in text fields and key presses
     void handleInput(sf::Event& event, const sf::RenderWindow& window) {
+
+        //If the mouse is pressed
         if (event.type == sf::Event::MouseButtonPressed) {
+
+            //If the left mouse button is pressed
             if (event.mouseButton.button == sf::Mouse::Left) {
-                cout << "ohno" << endl;
+
+                //If the mouse click is within the bounds of the input box
                 if (box.getGlobalBounds().contains(static_cast<int>(event.mouseButton.x), static_cast<int>(event.mouseButton.y))) {
-                    cout << "detected" << endl;
+
+                    //Set the "isActive" boolean to true
                     isActive = true;
-                    box.setOutlineColor(sf::Color::Blue); // Highlight the active box
+
+                    //Highlight the box by setting the outline color to red
+                    box.setOutlineColor(sf::Color::Red); 
                 }
+
+                //If the mouse click is outside the bounds of the input box
                 else {
+
+                    //Set the "isActive" boolean to false
                     isActive = false;
+
+                    //Highlight the box by setting the outline color to black
                     box.setOutlineColor(sf::Color::Black);
                 }
             }
         }
 
+        //If this box is active and a key is pressed
         if (isActive && event.type == sf::Event::TextEntered) {
-            if (event.text.unicode == 8 && !userInput.empty()) {  // Backspace
+
+            //If the backspace key is pressed and the userInput string is not an empty string
+            if (event.text.unicode == 8 && !userInput.empty()) {
+
+                //Remove the last character of the string
                 userInput.pop_back();
             }
-            else if (isAllowedCharacter(event.text.unicode)) {
+
+            //If the key pressed is not backspace, and the key pressed is a number
+            else if (isNumberOrPeriod(event.text.unicode)) {
                 userInput += static_cast<char>(event.text.unicode);
             }
+
+            //Update the text object with the changed userInput string
             text.setString(userInput);
         }
     }
 
 private:
+
+    //Create a RectangleShape object called box for the user input box
     sf::RectangleShape box;
+
+    //Create a Text object called text for the user input text
     sf::Text text;
+
+    //Create a Font object called font 
     sf::Font font;
-    std::string userInput;
+
+    //Create a string for this user input box
+    string userInput;
+
+    //Create a boolean "isActive" to determine if user is selecting this text box
     bool isActive;
 
-    bool isAllowedCharacter(sf::Uint32 unicode) {
-        // Check if the character is a number (0-9) or a period (.)
+    //Method for checking if typed character is a number 0-9 or a period
+    bool isNumberOrPeriod(sf::Uint32 unicode) {
         return (unicode >= '0' && unicode <= '9') || unicode == '.';
     }
 };
@@ -119,6 +180,7 @@ int main(int argc, char* argv[])
     //Set the title text color to black
     title.setFillColor(sf::Color::Black);
 
+    //Create testInput object
     InputBox testInput(200, 200, 100, 20);
 
     //Window loop
@@ -138,12 +200,13 @@ int main(int argc, char* argv[])
 
         }
 
-        //Set the background of the window to Red
-        window.clear(sf::Color::Red);
+        //Set the background of the window to white
+        window.clear(sf::Color::White);
 
         //Display the title
         window.draw(title);
 
+        //Draw test input box
         testInput.draw(window);
 
         //Update the window display for this frame
