@@ -4,6 +4,7 @@
 //Include vectors
 #include <vector>
 
+//Include iostream for cout for testing purposes
 #include <iostream>
 
 //Include header files for pricing model classes
@@ -23,41 +24,51 @@ const int windowHeight = 800;
 //Define the "inputBoxOutlineThickness" constant
 const int inputBoxOutlineThickness = 2;
 
+//Define the "ButtonOutlineThickness" constant
 const int ButtonOutlineThickness = 5;
 
+//Define const coordinates of the menu button
 const int menuSpriteX = 10;
 const int menuSpriteY = 10;
 
-bool onMenu = false;
+//The "screen" integer dictates which screen user is on
+int screen = 0;
 
-//Create color object lightGray
+//Create color objects lightGray and darkGray
 sf::Color lightGray(200, 200, 200);
 sf::Color darkGray(100, 100, 100);
 
-
+//Create font object
 sf::Font font;
 
+//Button class
 class Button {
 public:
 
+    //The "AssoiciatedScreen" integer dictates which screen is switched to after button click
+    int AssociatedScreen; 
+
     //Constructor
 
-    //Takes in x-coordinate of input box, y-coordinate of input box, width of input box, and height of input box 
-    Button(int x, int y, int width, int height, string buttonString) {
+    //Takes in x-coordinate of the button, y-coordinate of the button, width of the button, the associated screen of the button when clicked, height of the button, and the button's title 
+    Button(int x, int y, int width, int height, int associatedscreen, string buttonString) {
 
-        //Set the size of the box as a vector with the width and height from the Constructor
+        //Set the "AssociatedScreen" integer
+        AssociatedScreen = associatedscreen;
+
+        //Set the size of the button as a vector with the width and height from the Constructor
         button.setSize(sf::Vector2f(width, height));
 
-        //Set the position of the box at the coordinate (x, y)
+        //Set the position of the button at the coordinate (x, y)
         button.setPosition(x, y);
 
-        //Set the color of the box to lightGray
+        //Set the color of the button to lightGray
         button.setFillColor(darkGray);
 
-        //Set an outline thickness
+        //Set an outline thickness for the button
         button.setOutlineThickness(ButtonOutlineThickness);
 
-        //Set the box's outline color to black
+        //Set the button's outline color to black
         button.setOutlineColor(sf::Color::Black);
 
         //Load the arial font file 
@@ -75,34 +86,40 @@ public:
         //Set the character size of the text to 20
         text.setCharacterSize(40);
 
+        //Set the string of the text to the buttonString constructor arg
         text.setString(buttonString);
     }
 
     //Draw method
     void draw(sf::RenderWindow& window) {
 
-        //Draw the input text box
+        //Draw the button
         window.draw(button);
 
-        //Draw the inputted text 
+        //Draw the button's name
         window.draw(text);
     }
 
-    //Method for handling mouse button clicks in text fields
+    //Method for handling mouse button clicks and mouse moves
     void handleInput(sf::Event& event, const sf::RenderWindow& window) {
 
-
+        //If the mouse has moved
         if (event.type == sf::Event::MouseMoved) {
+            
+            //If the mouse is within the bounds of the button
             if (button.getGlobalBounds().contains(static_cast<int>(event.mouseMove.x), static_cast<int>(event.mouseMove.y))) {
-                button.setFillColor(darkGray);
-            }
-            else {
+
+                //Color the button light gray to create a hovering effect
                 button.setFillColor(lightGray);
             }
+
+            //If the mouse is not within the bounds of the button
+            else {
+
+                //Color the button dark gray because it's not being hovered over
+                button.setFillColor(darkGray);
+            }
         }
-
-
-
 
         //If the mouse is pressed
         if (event.type == sf::Event::MouseButtonPressed) {
@@ -110,32 +127,23 @@ public:
             //If the left mouse button is pressed
             if (event.mouseButton.button == sf::Mouse::Left) {
 
-                //If the mouse click is within the bounds of the input box
+                //If the mouse click is within the bounds of the button
                 if (button.getGlobalBounds().contains(static_cast<int>(event.mouseButton.x), static_cast<int>(event.mouseButton.y))) {
 
-                    cout << "clicked" << endl;
+                    //Change the screen integer to the screen associated with this button
+                    screen = AssociatedScreen;
                 }
             }
         }
     }
 private:
 
-    //
+    //Create RectangleShape object for button
     sf::RectangleShape button;
 
-    //
+    //Create Text object for the text of the button's name
     sf::Text text;
-
-    //
 };
-
-
-
-
-
-
-
-
 
 //Input Box Class
 class InputBox {
@@ -156,7 +164,7 @@ public:
         box.setPosition(x, y);
 
         //Set the color of the box to lightGray
-        box.setFillColor(lightGray);
+        box.setFillColor(darkGray);
 
         //Set an outline thickness
         box.setOutlineThickness(inputBoxOutlineThickness);
@@ -193,16 +201,28 @@ public:
     //Method for handling mouse button clicks in text fields and key presses
     void handleInput(sf::Event& event, const sf::RenderWindow& window) {
 
-
+        //If the mouse has moved
         if (event.type == sf::Event::MouseMoved) {
+
+            //If the mouse is within the bounds of the input box
             if (box.getGlobalBounds().contains(static_cast<int>(event.mouseMove.x), static_cast<int>(event.mouseMove.y))) {
+
+                //If the input box is not the active one
                 if (!isActive) {
-                    box.setFillColor(sf::Color::White); // Hover color
+
+                    //Fill the input box with light gray to create a hovering effect
+                    box.setFillColor(lightGray);
                 }
             }
+
+            //If the mouse is not within the bounds of the box
             else {
+
+                //If the input box is not the active one
                 if (!isActive) {
-                    box.setFillColor(lightGray); // Default color
+
+                    //Fill the input box with dark gray because it is not hovered over
+                    box.setFillColor(darkGray);
                 }
             }
         }
@@ -235,8 +255,8 @@ public:
                     //Highlight the box by setting the outline color to black
                     box.setOutlineColor(sf::Color::Black);
 
-
-                    box.setFillColor(lightGray);
+                    //Fill the box with dark Gray because the mouse is not over the input box
+                    box.setFillColor(darkGray);
                 }
             }
         }
@@ -288,22 +308,24 @@ private:
 //Main function
 int main(int argc, char* argv[])
 {
-    
     //Create window object
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "OptionsWizard");
 
-
+    //Create Texture object for the menu image for the menu button sprit
     sf::Texture menuImg;
+
+    //Load the image jpg file
     menuImg.loadFromFile("menu.jpg");
 
+    //Create the Sprite object for the menu sprite and set its image as the menuImg
     sf::Sprite menuSprite;
     menuSprite.setTexture(menuImg);
 
-
+    //Set the menu sprite's position
     menuSprite.setPosition(menuSpriteX, menuSpriteY);
 
+    //Scale down the image to 10% of it's original size
     menuSprite.setScale(0.1, 0.1);
-    
 
     //Create event object for event handling such as window close
     sf::Event e;
@@ -326,7 +348,7 @@ int main(int argc, char* argv[])
     //Create testInput object
     InputBox testInput(200, 200, 100, 20);
 
-    Button testButton(200, 200, 200, 40, "Black-Scholes");
+    Button testButton(200, 200, 200, 40, 1, "Black-Scholes");
 
     //Window loop
     while (window.isOpen()) {
@@ -338,7 +360,7 @@ int main(int argc, char* argv[])
 
                 //If the mouse click is within the bounds of the menu button
                 if (menuSprite.getGlobalBounds().contains(static_cast<int>(e.mouseButton.x), static_cast<int>(e.mouseButton.y))) {
-                    onMenu = true;
+                    screen = 0;
                 }
             }
 
@@ -349,7 +371,7 @@ int main(int argc, char* argv[])
                 window.close();
             }
 
-            if (onMenu == true) {
+            if (screen == 0) {
                 testButton.handleInput(e, window);
             }
             else {
@@ -363,7 +385,7 @@ int main(int argc, char* argv[])
         window.clear(sf::Color::White);
 
         //Display the title
-        if (onMenu == true) {
+        if (screen == 0) {
             window.draw(menuTitle);
             testButton.draw(window);
 
