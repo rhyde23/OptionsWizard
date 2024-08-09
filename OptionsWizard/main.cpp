@@ -4,6 +4,8 @@
 //Include vectors
 #include <vector>
 
+#include <iostream>
+
 //Include header files for pricing model classes
 #include "BlackScholes.h"
 
@@ -20,6 +22,11 @@ const int windowHeight = 800;
 
 //Define the "inputBoxOutlineThickness" constant
 const int inputBoxOutlineThickness = 3;
+
+const int menuSpriteX = 10;
+const int menuSpriteY = 10;
+
+bool onMenu = false;
 
 //Create color object lightGray
 sf::Color lightGray(211, 211, 211);
@@ -190,10 +197,10 @@ int main(int argc, char* argv[])
     menuSprite.setTexture(menuImg);
 
 
-    menuSprite.setPosition(10, 10);
+    menuSprite.setPosition(menuSpriteX, menuSpriteY);
 
     menuSprite.setScale(0.1, 0.1);
-
+    
 
     //Create event object for event handling such as window close
     sf::Event e;
@@ -205,16 +212,16 @@ int main(int argc, char* argv[])
     arialFont.loadFromFile("arial.ttf");
 
     //Create a Text oject for the title text using the arial font
-    sf::Text title("OptionsWizard", arialFont, 30);
+    sf::Text menuTitle("Menu", arialFont, 30);
 
     //Get the width of the text block
-    int textWidth = title.getLocalBounds().width;
+    int textWidth = menuTitle.getLocalBounds().width;
 
     //Set the position of the text at the top middle of the screen
-    title.setPosition((windowWidth-textWidth)/2, 10);
+    menuTitle.setPosition((windowWidth-textWidth)/2, 10);
 
     //Set the title text color to black
-    title.setFillColor(sf::Color::Black);
+    menuTitle.setFillColor(sf::Color::Black);
 
     //Create testInput object
     InputBox testInput(200, 200, 100, 20);
@@ -225,6 +232,14 @@ int main(int argc, char* argv[])
         //Event handling loop
         while (window.pollEvent(e)) {
 
+            if (e.mouseButton.button == sf::Mouse::Left) {
+
+                //If the mouse click is within the bounds of the menu button
+                if (menuSprite.getGlobalBounds().contains(static_cast<int>(e.mouseButton.x), static_cast<int>(e.mouseButton.y))) {
+                    onMenu = true;
+                }
+            }
+
             //If the user is trying to close the window
             if (e.type == sf::Event::Closed) {
 
@@ -234,16 +249,20 @@ int main(int argc, char* argv[])
 
             testInput.handleInput(e, window);
 
+
         }
 
         //Set the background of the window to white
         window.clear(sf::Color::White);
 
         //Display the title
-        window.draw(title);
+        if (onMenu == true) {
+            window.draw(menuTitle);
 
-        //Draw test input box
-        testInput.draw(window);
+        }
+        else {
+            testInput.draw(window);
+        }
 
         window.draw(menuSprite);
 
