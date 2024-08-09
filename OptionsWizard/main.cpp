@@ -21,7 +21,9 @@ const int windowWidth = 800;
 const int windowHeight = 800;
 
 //Define the "inputBoxOutlineThickness" constant
-const int inputBoxOutlineThickness = 3;
+const int inputBoxOutlineThickness = 2;
+
+const int ButtonOutlineThickness = 5;
 
 const int menuSpriteX = 10;
 const int menuSpriteY = 10;
@@ -29,7 +31,111 @@ const int menuSpriteY = 10;
 bool onMenu = false;
 
 //Create color object lightGray
-sf::Color lightGray(211, 211, 211);
+sf::Color lightGray(200, 200, 200);
+sf::Color darkGray(100, 100, 100);
+
+
+sf::Font font;
+
+class Button {
+public:
+
+    //Constructor
+
+    //Takes in x-coordinate of input box, y-coordinate of input box, width of input box, and height of input box 
+    Button(int x, int y, int width, int height, string buttonString) {
+
+        //Set the size of the box as a vector with the width and height from the Constructor
+        button.setSize(sf::Vector2f(width, height));
+
+        //Set the position of the box at the coordinate (x, y)
+        button.setPosition(x, y);
+
+        //Set the color of the box to lightGray
+        button.setFillColor(darkGray);
+
+        //Set an outline thickness
+        button.setOutlineThickness(ButtonOutlineThickness);
+
+        //Set the box's outline color to black
+        button.setOutlineColor(sf::Color::Black);
+
+        //Load the arial font file 
+        font.loadFromFile("arial.ttf");
+
+        //Use the "setFont" method to set the font of this text object to arial
+        text.setFont(font);
+
+        //Set the position of the text (change later)
+        text.setPosition(x, y);
+
+        //Set the color of the text to black
+        text.setFillColor(sf::Color::Black);
+
+        //Set the character size of the text to 20
+        text.setCharacterSize(40);
+
+        text.setString(buttonString);
+    }
+
+    //Draw method
+    void draw(sf::RenderWindow& window) {
+
+        //Draw the input text box
+        window.draw(button);
+
+        //Draw the inputted text 
+        window.draw(text);
+    }
+
+    //Method for handling mouse button clicks in text fields
+    void handleInput(sf::Event& event, const sf::RenderWindow& window) {
+
+
+        if (event.type == sf::Event::MouseMoved) {
+            if (button.getGlobalBounds().contains(static_cast<int>(event.mouseMove.x), static_cast<int>(event.mouseMove.y))) {
+                button.setFillColor(darkGray);
+            }
+            else {
+                button.setFillColor(lightGray);
+            }
+        }
+
+
+
+
+        //If the mouse is pressed
+        if (event.type == sf::Event::MouseButtonPressed) {
+
+            //If the left mouse button is pressed
+            if (event.mouseButton.button == sf::Mouse::Left) {
+
+                //If the mouse click is within the bounds of the input box
+                if (button.getGlobalBounds().contains(static_cast<int>(event.mouseButton.x), static_cast<int>(event.mouseButton.y))) {
+
+                    cout << "clicked" << endl;
+                }
+            }
+        }
+    }
+private:
+
+    //
+    sf::RectangleShape button;
+
+    //
+    sf::Text text;
+
+    //
+};
+
+
+
+
+
+
+
+
 
 //Input Box Class
 class InputBox {
@@ -163,9 +269,6 @@ private:
     //Create a Text object called text for the user input text
     sf::Text text;
 
-    //Create a Font object called font 
-    sf::Font font;
-
     //Create a string for this user input box
     string userInput;
 
@@ -205,14 +308,11 @@ int main(int argc, char* argv[])
     //Create event object for event handling such as window close
     sf::Event e;
 
-    //Create Arial font object for title text
-    sf::Font arialFont;
-
     //Load the arial font file 
-    arialFont.loadFromFile("arial.ttf");
+    font.loadFromFile("arial.ttf");
 
     //Create a Text oject for the title text using the arial font
-    sf::Text menuTitle("Menu", arialFont, 30);
+    sf::Text menuTitle("Menu", font, 30);
 
     //Get the width of the text block
     int textWidth = menuTitle.getLocalBounds().width;
@@ -225,6 +325,8 @@ int main(int argc, char* argv[])
 
     //Create testInput object
     InputBox testInput(200, 200, 100, 20);
+
+    Button testButton(200, 200, 200, 40, "Black-Scholes");
 
     //Window loop
     while (window.isOpen()) {
@@ -247,7 +349,12 @@ int main(int argc, char* argv[])
                 window.close();
             }
 
-            testInput.handleInput(e, window);
+            if (onMenu == true) {
+                testButton.handleInput(e, window);
+            }
+            else {
+                testInput.handleInput(e, window);
+            }
 
 
         }
@@ -258,6 +365,7 @@ int main(int argc, char* argv[])
         //Display the title
         if (onMenu == true) {
             window.draw(menuTitle);
+            testButton.draw(window);
 
         }
         else {
