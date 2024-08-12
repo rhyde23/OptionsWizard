@@ -11,7 +11,7 @@ private:
     //Spot price of underlying asset
     double spotPriceOfUnderlying;
 
-    //Struje price
+    //Strike price
     double strikePrice;
 
     //Risk-free interest rate

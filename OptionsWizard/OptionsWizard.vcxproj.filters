@@ -26,5 +26,8 @@
     <ClInclude Include="BlackScholes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Binomial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
