@@ -77,17 +77,20 @@ public:
         //Use the "setFont" method to set the font of this text object to arial
         text.setFont(font);
 
-        //Set the position of the text (change later)
-        text.setPosition(x, y);
-
-        //Set the color of the text to black
-        text.setFillColor(sf::Color::Black);
-
         //Set the character size of the text to 20
-        text.setCharacterSize(40);
+        text.setCharacterSize(15);
 
         //Set the string of the text to the buttonString constructor arg
         text.setString(buttonString);
+
+        int textWidth = text.getLocalBounds().width;
+        int textHeight = text.getLocalBounds().height;
+            
+        //Set the position of the text to the exact center of the button rectangle
+        text.setPosition(x+((width-textWidth)/2), y+((height-textHeight)/2));
+
+        //Set the color of the text to black
+        text.setFillColor(sf::Color::Black);
     }
 
     //Draw method
@@ -308,6 +311,17 @@ private:
 //Main function
 int main(int argc, char* argv[])
 {
+    // Creating a BlackScholes object with some test inputs
+    BlackScholes bs(100.0, 100.0, 0.05, 1.0, 0.2);
+
+    double callPrice = bs.getCallPrice();
+    double putPrice = bs.getPutPrice();
+
+    //Print results
+    cout << "Call Price: " << callPrice << endl;
+    cout << "Put Price: " << putPrice << endl;
+
+
     //Create window object
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "OptionsWizard");
 
@@ -348,7 +362,14 @@ int main(int argc, char* argv[])
     //Create testInput object
     InputBox testInput(200, 200, 100, 20);
 
-    Button testButton(200, 200, 200, 40, 1, "Black-Scholes");
+
+    vector<Button> buttons;
+
+    buttons.emplace_back(200, 100, 200, 40, 1, "Black-Scholes");
+    buttons.emplace_back(200, 200, 200, 40, 2, "Binomial");
+    buttons.emplace_back(200, 300, 200, 40, 3, "Monte Carlo Simulation");
+    buttons.emplace_back(200, 400, 200, 40, 4, "Heston");
+    buttons.emplace_back(200, 500, 200, 40, 5, "Bachelier");
 
     //Window loop
     while (window.isOpen()) {
@@ -372,7 +393,9 @@ int main(int argc, char* argv[])
             }
 
             if (screen == 0) {
-                testButton.handleInput(e, window);
+                for (int i = 0; i < buttons.size(); ++i) {
+                    buttons[i].handleInput(e, window);
+                }
             }
             else {
                 testInput.handleInput(e, window);
@@ -387,7 +410,9 @@ int main(int argc, char* argv[])
         //Display the title
         if (screen == 0) {
             window.draw(menuTitle);
-            testButton.draw(window);
+            for (int j = 0; j < buttons.size(); ++j) {
+                buttons[j].draw(window);
+            }
 
         }
         else {
