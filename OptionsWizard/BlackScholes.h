@@ -29,7 +29,7 @@ private:
 //Define methods
 public:
 
-    //Constructor - will be cin user input
+    //Constructor
     BlackScholes(double spotPriceOfUnderlying, double strikePrice, double interestRate, double yearsToMaturity, double volatilityOfUnderlying);
 
     //Double method returning call price
