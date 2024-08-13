@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Binomial.cpp" />
     <ClCompile Include="BlackScholes.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

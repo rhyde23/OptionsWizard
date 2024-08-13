@@ -21,6 +21,9 @@
     <ClCompile Include="BlackScholes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Binomial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlackScholes.h">
