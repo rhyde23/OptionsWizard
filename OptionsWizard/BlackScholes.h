@@ -23,7 +23,7 @@ private:
     //Volatility of underlying asset
     double volatilityOfUnderlying;
 
-    //Double method calculating the normal cumulative distribution function
+    //The "getNormalDistribution" method calculates the normal cumulative distribution function
     double getNormalDistribution(double x) const;
 
 //Define methods
@@ -32,10 +32,10 @@ public:
     //Constructor
     BlackScholes(double spotPriceOfUnderlying, double strikePrice, double interestRate, double yearsToMaturity, double volatilityOfUnderlying);
 
-    //Double method returning call price
+    //The "getCallPrice" method returns the call price using Black-Scholes
     double getCallPrice() const;
 
-    //Double method returning put price
+    //The "getPutPrice" method returns the put price using Black-Scholes
     double getPutPrice() const;
 };
 

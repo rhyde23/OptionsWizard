@@ -28,7 +28,7 @@ private:
     //True = call option, False = put option
     bool isCall;
 
-    //Method to calculate the payoff of the option at expiration for a given stock price.
+    //The "optionPayoff" method calculates the payoff of the option at expiration for a given stock price.
     double optionPayoff(double stockPrice);
 
 public:
@@ -36,7 +36,7 @@ public:
     //Constructor
     Binomial(double S, double K, double T, double R, double V, int steps, bool isCall);
 
-    //Method to calculate option price for calls and puts
+    //The "priceOption" method calculates option price for calls and puts using the Binomial model
     double priceOption();
 
 };
