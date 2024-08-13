@@ -9,6 +9,7 @@
 
 //Include header files for pricing model classes
 #include "BlackScholes.h"
+#include "Binomial.h"
 
 //Include SFML Graphics library
 #include "SFML/Graphics.hpp"
@@ -311,15 +312,21 @@ private:
 //Main function
 int main(int argc, char* argv[])
 {
-    // Creating a BlackScholes object with some test inputs
-    BlackScholes bs(100.0, 100.0, 0.05, 1.0, 0.2);
+    //Testing inputs for Binomial model
+    double S = 100.0;  
+    double K = 100.0;   
+    double Y = 1.0;     
+    double R = 0.05;    
+    double V = 0.2; 
+    int steps = 100;
+    bool isCall = true;
 
-    double callPrice = bs.getCallPrice();
-    double putPrice = bs.getPutPrice();
+    //Make Binomial model object
+    Binomial model(S, K, Y, R, V, steps, isCall);
 
-    //Print results
-    cout << "Call Price: " << callPrice << endl;
-    cout << "Put Price: " << putPrice << endl;
+    //Calculate test
+    double optionPrice = model.priceOption();
+    cout << "The option price is: " << optionPrice << endl;
 
 
     //Create window object

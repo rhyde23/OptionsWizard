@@ -34,11 +34,11 @@ private:
 public:
 
     //Constructor
-    Binomial(double S, double K, double T, double r, double sigma, int steps, bool isCall);
+    Binomial(double S, double K, double T, double R, double V, int steps, bool isCall);
 
     //Method to calculate option price for calls and puts
     double priceOption();
 
 };
 
-#endif // BINOMIAL_H
+#endif
