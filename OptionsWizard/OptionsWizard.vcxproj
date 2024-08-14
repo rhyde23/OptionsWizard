@@ -142,6 +142,7 @@
     <ClCompile Include="Binomial.cpp" />
     <ClCompile Include="BlackScholes.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MonteCarlo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Binomial.h" />

@@ -11,7 +11,7 @@ using namespace std;
 //4: The time remaining until expiration date in years
 //5: The volatility of underlying asset
 
-BlackScholes::BlackScholes(double s, double k, double r, double t, double v) : spotPriceOfUnderlying(s), strikePrice(k), interestRate(r), yearsToMaturity(t), volatilityOfUnderlying(v) {}
+BlackScholes::BlackScholes(double S, double K, double R, double Y, double V) : spotPriceOfUnderlying(S), strikePrice(K), interestRate(R), yearsToMaturity(Y), volatilityOfUnderlying(V) {}
 
 //The "getCallPrice" method calculates the Black-Scholes call option price
 double BlackScholes::getCallPrice() const {

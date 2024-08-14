@@ -25,8 +25,8 @@ private:
     //Desired number of simulations
     int simulations;
 
-    //The "gaussianRandom" method generates and returns a random "shock value" from a normal distribution for simulating unexpected asset price flunctuations
-    double gaussianRandom();
+    //The "generateRandomNormal" method generates and returns a random "shock value" from a normal distribution for simulating unexpected asset price flunctuations
+    double generateRandomNormal();
 
     //The "simulatePrice" method simulates and returns a potential future price of the underlying asset
     double simulatePrice();
