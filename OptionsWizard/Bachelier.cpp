@@ -2,9 +2,6 @@
 #include "Bachelier.h"
 #include <cmath>
 
-//Include normalDistribution.h to access the "getNormalDistribution" method
-#include "normalDistribution.h"
-
 //Pi
 double PI = 3.14159265358979323846;
 
@@ -38,4 +35,12 @@ double Bachelier::getPutPrice() const {
 
     //Calculate the put option price using the Bachelier formula
     return (strikePrice - spotPriceOfUnderlying) * getNormalDistribution(-d) + volatilityOfUnderlying * sqrt(yearsToMaturity) * (1.0 / sqrt(2.0 * PI)) * exp(-0.5 * d * d);
+}
+
+//The "getNormalDistribution" method calculates the normal cumulative distribution function
+double Bachelier::getNormalDistribution(double x) const {
+
+    //The normal CDF formula is: 0.5 * erfc(-x / sqrt(2))
+    return 0.5 * erfc(-x / sqrt(2));
+
 }

@@ -2,6 +2,7 @@
 #ifndef BLACK_SCHOLES_H
 #define BLACK_SCHOLES_H
 
+
 //Black-Scholes model class
 class BlackScholes {
 
@@ -34,6 +35,9 @@ public:
 
     //The "getPutPrice" method returns the put price using Black-Scholes
     double getPutPrice() const;
+
+    //The "getNormalDistribution" method calculates the normal cumulative distribution function
+    double getNormalDistribution(double x) const;
 };
 
 #endif // BLACKSCHOLES_H

@@ -11,6 +11,7 @@
 #include "BlackScholes.h"
 #include "Binomial.h"
 #include "MonteCarlo.h"
+#include "Bachelier.h"
 
 //Include SFML Graphics library
 #include "SFML/Graphics.hpp"
@@ -314,12 +315,14 @@ private:
 int main(int argc, char* argv[])
 {
     //Test object
-    MonteCarlo mc(100.0, 100.0, 0.05, 0.2, 1.0, 10000, false);
+    Bachelier bachelier(100.0, 105.0, 1.0, 0.05, 0.2);
 
-    //test method
-    double optionPrice = mc.priceOption();
+    //test call and put methods
+    double callPrice = bachelier.getCallPrice();
+    double putPrice = bachelier.getPutPrice();
 
-    cout << "Option Price: " << optionPrice << endl;
+    cout << "Call Option Price: " << callPrice << endl;
+    cout << "Put Option Price: " << putPrice << endl;
 
 
 

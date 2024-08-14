@@ -139,12 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bachelier.cpp" />
     <ClCompile Include="Binomial.cpp" />
     <ClCompile Include="BlackScholes.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MonteCarlo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bachelier.h" />
     <ClInclude Include="Binomial.h" />
     <ClInclude Include="BlackScholes.h" />
     <ClInclude Include="MonteCarlo.h" />

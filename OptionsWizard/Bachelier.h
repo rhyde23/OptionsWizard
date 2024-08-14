@@ -31,6 +31,9 @@ public:
 
     //The "getPutPrice" method calculates the Bachelier put option price
     double getPutPrice() const;
+
+    //The "getNormalDistribution" method calculates the normal cumulative distribution function
+    double getNormalDistribution(double x) const;
 };
 
 #endif
