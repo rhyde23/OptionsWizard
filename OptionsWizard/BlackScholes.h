@@ -23,9 +23,6 @@ private:
     //Volatility of underlying asset
     double volatilityOfUnderlying;
 
-    //The "getNormalDistribution" method calculates the normal cumulative distribution function
-    double getNormalDistribution(double x) const;
-
 //Define methods
 public:
 

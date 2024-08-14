@@ -2,6 +2,9 @@
 #include "BlackScholes.h"
 #include <iostream>
 
+//Include normalDistribution.h to access the "getNormalDistribution" method
+#include "normalDistribution.h"
+
 using namespace std;
 
 //Constructor taking in:
@@ -37,10 +40,4 @@ double BlackScholes::getPutPrice() const {
 
     //Calculate the put option price using the Black-Scholes formula
     return strikePrice * exp(-interestRate * yearsToMaturity) * getNormalDistribution(-d2) - spotPriceOfUnderlying * getNormalDistribution(-d1);
-}
-//The "getNormalDistribution" method calculates the normal cumulative distribution function
-double BlackScholes::getNormalDistribution(double x) const {
-
-    //The normal CDF formula is: 0.5 * erfc(-x / sqrt(2))
-    return 0.5 * erfc(-x / sqrt(2));
 }

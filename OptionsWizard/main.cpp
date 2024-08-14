@@ -370,8 +370,7 @@ int main(int argc, char* argv[])
     buttons.emplace_back(200, 100, 200, 40, 1, "Black-Scholes");
     buttons.emplace_back(200, 200, 200, 40, 2, "Binomial");
     buttons.emplace_back(200, 300, 200, 40, 3, "Monte Carlo Simulation");
-    buttons.emplace_back(200, 400, 200, 40, 4, "Heston");
-    buttons.emplace_back(200, 500, 200, 40, 5, "Bachelier");
+    buttons.emplace_back(200, 400, 200, 40, 4, "Bachelier");
 
     //Window loop
     while (window.isOpen()) {
