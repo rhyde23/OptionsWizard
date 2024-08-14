@@ -1,5 +1,6 @@
 //Include header file
 #include "Bachelier.h"
+
 #include <cmath>
 
 //Pi

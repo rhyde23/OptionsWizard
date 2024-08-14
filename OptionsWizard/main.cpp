@@ -315,7 +315,7 @@ private:
 int main(int argc, char* argv[])
 {
     //Test object
-    Bachelier bachelier(100.0, 105.0, 1.0, 0.05, 0.2);
+    Bachelier bachelier(200.0, 105.0, 1.0, 0.05, 0.2);
 
     //test call and put methods
     double callPrice = bachelier.getCallPrice();
