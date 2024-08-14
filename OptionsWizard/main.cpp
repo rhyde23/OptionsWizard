@@ -10,6 +10,7 @@
 //Include header files for pricing model classes
 #include "BlackScholes.h"
 #include "Binomial.h"
+#include "MonteCarlo.h"
 
 //Include SFML Graphics library
 #include "SFML/Graphics.hpp"
@@ -312,21 +313,15 @@ private:
 //Main function
 int main(int argc, char* argv[])
 {
-    //Testing inputs for Binomial model
-    double S = 100.0;  
-    double K = 100.0;   
-    double Y = 1.0;     
-    double R = 0.05;    
-    double V = 0.2; 
-    int steps = 100;
-    bool isCall = true;
+    //Test object
+    MonteCarlo mc(100.0, 100.0, 0.05, 0.2, 1.0, 10000, false);
 
-    //Make Binomial model object
-    Binomial model(S, K, Y, R, V, steps, isCall);
+    //test method
+    double optionPrice = mc.priceOption();
 
-    //Calculate test
-    double optionPrice = model.priceOption();
-    cout << "The option price is: " << optionPrice << endl;
+    cout << "Option Price: " << optionPrice << endl;
+
+
 
 
     //Create window object

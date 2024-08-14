@@ -12,8 +12,8 @@ using namespace std;
 //6: The number of steps in Binomial tree
 //7: Call or Put?
 
-Binomial::Binomial(double S, double K, double Y, double R, double V, int steps, bool isCall)
-    : spotPriceOfUnderlying(S), strikePrice(K), yearsToMaturity(Y), riskFreeRate(R), volatilityOfUnderlying(V), stepsForBinomial(steps), isCall(isCall) {}
+Binomial::Binomial(double S, double K, double Y, double R, double V, int steps, bool C)
+    : spotPriceOfUnderlying(S), strikePrice(K), yearsToMaturity(Y), riskFreeRate(R), volatilityOfUnderlying(V), stepsForBinomial(steps), isCall(C) {}
 
 //Method to calculate the payoff of the option at expiration for a given stock price.
 double Binomial::optionPayoff(double stockPrice) {

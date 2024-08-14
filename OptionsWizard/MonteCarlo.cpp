@@ -15,8 +15,8 @@ using namespace std;
 //5: Years to maturity
 //6: Desired number of simulations
 
-MonteCarlo::MonteCarlo(double S, double K, double R, double V, double Y, int s)
-    : spotPriceOfUnderlying(S), strikePrice(K), riskFreeRate(R), volatilityOfUnderlying(V), yearsToMaturity(Y), simulations(s) {}
+MonteCarlo::MonteCarlo(double S, double K, double R, double V, double Y, int s, bool C)
+    : spotPriceOfUnderlying(S), strikePrice(K), riskFreeRate(R), volatilityOfUnderlying(V), yearsToMaturity(Y), simulations(s), isCall(C) {}
 
 //The "generateRandomNormal" method generates and returns a random "shock value" from a normal distribution for simulating unexpected asset price flunctuations
 double MonteCarlo::generateRandomNormal() {
@@ -56,8 +56,21 @@ double MonteCarlo::priceOption() {
         //Simulate the future price for this iteration
         double simulatedPrice = simulatePrice();
 
-        //Calculate the payoff
-        double payoff = max(simulatedPrice - strikePrice, 0.0);
+        //Initialize payoff variable
+        double payoff;
+        
+        //If the option is a call
+        if (isCall == true) {
+
+            //Calculate the payoff for a call
+            payoff = max(simulatedPrice - strikePrice, 0.0);
+        }
+        //If the option is a put
+        else {
+
+            //Calculate the payoff for a put
+            payoff = max(strikePrice - simulatedPrice, 0.0);
+        }
 
         //Add the payoff to the payoff sum
         payoffSum += payoff;
