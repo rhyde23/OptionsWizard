@@ -34,6 +34,12 @@ const int ButtonOutlineThickness = 5;
 const int menuSpriteX = 10;
 const int menuSpriteY = 10;
 
+
+//Define constant Button UI parameters
+const int menuButtonWidth = 200;
+const int menuButtonHeight = 80;
+
+
 //The "screen" integer dictates which screen user is on
 int screen = 0;
 
@@ -43,6 +49,7 @@ sf::Color darkGray(100, 100, 100);
 
 //Create font object
 sf::Font font;
+
 
 //Button class
 class Button {
@@ -80,8 +87,8 @@ public:
         //Use the "setFont" method to set the font of this text object to arial
         text.setFont(font);
 
-        //Set the character size of the text to 20
-        text.setCharacterSize(15);
+        //Set the character size of the text to 25
+        text.setCharacterSize(25);
 
         //Set the string of the text to the buttonString constructor arg
         text.setString(buttonString);
@@ -355,6 +362,36 @@ int main(int argc, char* argv[])
     //Create a Text oject for the title text using the arial font
     sf::Text menuTitle("Menu", font, 30);
 
+    //String array of all the models available
+    string modelNames[4] = {"Black-Scholes", "Binomial", "Monte Carlo", "Bachelier"};
+    
+    //Vector to be filled with Button objects for each model
+    vector<Button> buttons;
+
+    //Vector to be filled with Text objects for each model's input screen titles
+    vector<sf::Text> inputTitles;
+    
+    //UI parameters
+    int menuButtonX = (windowWidth - menuButtonWidth) / 2;
+    int buttonY = 120;
+
+    //Iterate through each model name
+    for (int i = 0; i < 4; ++i) {
+
+        //Add its button to the buttons vector
+        buttons.emplace_back(menuButtonX, buttonY+(menuButtonHeight*(i*2)), menuButtonWidth, menuButtonHeight, i+1, modelNames[i]);
+        
+        //Add its input title to the inputTitles vector
+        inputTitles.emplace_back(modelNames[i], font, 30);
+
+        //Set the position of its input title to the middle top
+        inputTitles[i].setPosition((windowWidth - inputTitles[i].getLocalBounds().width) / 2, 10);
+
+        //Set the color of its input title to black
+        inputTitles[i].setFillColor(sf::Color::Black);
+
+    }
+
     //Get the width of the text block
     int textWidth = menuTitle.getLocalBounds().width;
 
@@ -367,13 +404,6 @@ int main(int argc, char* argv[])
     //Create testInput object
     InputBox testInput(200, 200, 100, 20);
 
-
-    vector<Button> buttons;
-
-    buttons.emplace_back(200, 100, 200, 40, 1, "Black-Scholes");
-    buttons.emplace_back(200, 200, 200, 40, 2, "Binomial");
-    buttons.emplace_back(200, 300, 200, 40, 3, "Monte Carlo Simulation");
-    buttons.emplace_back(200, 400, 200, 40, 4, "Bachelier");
 
     //Window loop
     while (window.isOpen()) {
@@ -420,7 +450,11 @@ int main(int argc, char* argv[])
 
         }
         else {
+            
             testInput.draw(window);
+
+            //Draw the input title
+            window.draw(inputTitles[screen - 1]);
         }
 
         window.draw(menuSprite);
