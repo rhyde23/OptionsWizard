@@ -165,16 +165,46 @@ public:
     //Constructor
 
     //Takes in x-coordinate of input box, y-coordinate of input box, width of input box, and height of input box 
-    InputBox(int x, int y, int width, int height) {
+    InputBox(int x, int y, int width, int height, string label) {
 
         //Set the "isActive" to false by default
         isActive = false;
 
+        //Load the arial font file 
+        font.loadFromFile("arial.ttf");
+
+        //Use the "setFont" method to set the font of this text object to arial
+        labelText.setFont(font);
+
+        //Set the string of the label text to the constructor parameter label string
+        labelText.setString(label);
+
+        //Set the position of the label text at the coordinate (x, y)
+        labelText.setPosition(x, y);
+
+        //Set the color of the label text to black
+        labelText.setFillColor(sf::Color::Black);
+
+        //Set the character size of the labeltext to 20
+        labelText.setCharacterSize(20);
+
+        //Use the "setFont" method to set the font of this text object to arial
+        text.setFont(font);
+
+        //Set the position of the text to the right of the label text
+        text.setPosition(x + labelText.getLocalBounds().width + 20, y);
+
+        //Set the color of the text to black
+        text.setFillColor(sf::Color::Black);
+
+        //Set the character size of the text to 20
+        text.setCharacterSize(20);
+
         //Set the size of the box as a vector with the width and height from the Constructor
         box.setSize(sf::Vector2f(width, height));
-        
-        //Set the position of the box at the coordinate (x, y)
-        box.setPosition(x, y);
+
+        //Set the position of the boxto the right of the label text
+        box.setPosition(x + labelText.getLocalBounds().width + 20, y);
 
         //Set the color of the box to lightGray
         box.setFillColor(darkGray);
@@ -184,21 +214,6 @@ public:
 
         //Set the box's outline color to black
         box.setOutlineColor(sf::Color::Black);
-
-        //Load the arial font file 
-        font.loadFromFile("arial.ttf");
-
-        //Use the "setFont" method to set the font of this text object to arial
-        text.setFont(font);
-
-        //Set the position of the text (change later)
-        text.setPosition(x, y);
-
-        //Set the color of the text to black
-        text.setFillColor(sf::Color::Black);
-
-        //Set the character size of the text to 20
-        text.setCharacterSize(20);
     }
 
     //Draw method
@@ -206,6 +221,9 @@ public:
 
         //Draw the input text box
         window.draw(box);
+
+        //Draw the label text 
+        window.draw(labelText);
 
         //Draw the inputted text 
         window.draw(text);
@@ -298,6 +316,9 @@ private:
 
     //Create a RectangleShape object called box for the user input box
     sf::RectangleShape box;
+
+    //Create a Text object called text for the label text for this input box
+    sf::Text labelText;
 
     //Create a Text object called text for the user input text
     sf::Text text;
@@ -402,7 +423,7 @@ int main(int argc, char* argv[])
     menuTitle.setFillColor(sf::Color::Black);
 
     //Create testInput object
-    InputBox testInput(200, 200, 100, 20);
+    InputBox testInput(200, 200, 100, 20, "Cool Label:");
 
 
     //Window loop
