@@ -53,6 +53,13 @@ sf::Color darkGray(100, 100, 100);
 //Create font object
 sf::Font font;
 
+//Option Type Button UI Parameters
+const int optionTypeButtonWidth = 150;
+const int optionTypeButtonHeight = 30;
+const int callButtonX = (windowWidth-(optionTypeButtonWidth*3))/2;
+const int putButtonX = callButtonX + (optionTypeButtonWidth * 2);
+const int optionTypeButtonY = 600;
+
 
 //Button class
 class Button {
@@ -402,6 +409,35 @@ int main(int argc, char* argv[])
     int menuButtonX = (windowWidth - menuButtonWidth) / 2;
     int buttonY = 120;
 
+    //Create rectangle objects for the option type buttons
+    sf::RectangleShape callOptionButton;
+    sf::RectangleShape putOptionButton;
+
+    //Set the call option type button selected boolean to null
+    //true = call, false = put
+    bool callSelected = NULL;
+
+    //Set the size of the option type buttons as a vector with the constants width and height
+    callOptionButton.setSize(sf::Vector2f(optionTypeButtonWidth, optionTypeButtonHeight));
+    putOptionButton.setSize(sf::Vector2f(optionTypeButtonWidth, optionTypeButtonHeight));
+
+    //Set the position of the option type buttons
+    callOptionButton.setPosition(callButtonX, optionTypeButtonY);
+    putOptionButton.setPosition(putButtonX, optionTypeButtonY);
+
+    //Set the color of option type buttons to dark gray
+    callOptionButton.setFillColor(darkGray);
+    putOptionButton.setFillColor(darkGray);
+
+    //Set an outline thickness as the same as the input box outline thickness
+    callOptionButton.setOutlineThickness(inputBoxOutlineThickness);
+    putOptionButton.setOutlineThickness(inputBoxOutlineThickness);
+
+    //Set the option type buttons' outline color to black
+    callOptionButton.setOutlineColor(sf::Color::Black);
+    putOptionButton.setOutlineColor(sf::Color::Black);
+
+
     //Iterate through each model name
     for (int i = 0; i < 4; ++i) {
 
@@ -444,6 +480,8 @@ int main(int argc, char* argv[])
                 if (menuSprite.getGlobalBounds().contains(static_cast<int>(e.mouseButton.x), static_cast<int>(e.mouseButton.y))) {
                     screen = 0;
                 }
+
+
             }
 
             //If the user is trying to close the window
@@ -453,11 +491,18 @@ int main(int argc, char* argv[])
                 window.close();
             }
 
+            //If the screen is the menu screen
             if (screen == 0) {
+
+                //Loop through each button
                 for (int i = 0; i < buttons.size(); ++i) {
+
+                    //Call the "handleInput" method for this button for event handling
                     buttons[i].handleInput(e, window);
                 }
             }
+
+            //If the screen is the input screen
             else {
                 testInput.handleInput(e, window);
             }
@@ -468,20 +513,31 @@ int main(int argc, char* argv[])
         //Set the background of the window to white
         window.clear(sf::Color::White);
 
-        //Display the title
+        //If the screen is the menu screen
         if (screen == 0) {
+
+            //Display the title
             window.draw(menuTitle);
+
+            //Loop through each button
             for (int j = 0; j < buttons.size(); ++j) {
+
+                //Draw the button
                 buttons[j].draw(window);
             }
-
         }
+
+        //If the screen is the input screen
         else {
             
             testInput.draw(window);
 
             //Draw the input title
             window.draw(inputTitles[screen - 1]);
+
+            //Draw the option type buttons
+            window.draw(callOptionButton);
+            window.draw(putOptionButton);
         }
 
         window.draw(menuSprite);
