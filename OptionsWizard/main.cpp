@@ -60,6 +60,10 @@ const int callButtonX = (windowWidth-(optionTypeButtonWidth*3))/2;
 const int putButtonX = callButtonX + (optionTypeButtonWidth * 2);
 const int optionTypeButtonY = 600;
 
+//Set the call option type button selected boolean to null
+//true = call, false = put
+bool callSelected = NULL;
+
 
 //Button class
 class Button {
@@ -252,7 +256,7 @@ public:
             if (box.getGlobalBounds().contains(static_cast<int>(event.mouseMove.x), static_cast<int>(event.mouseMove.y))) {
 
                 //If the input box is not the active one
-                if (!isActive) {
+                if (isActive == false) {
 
                     //Fill the input box with light gray to create a hovering effect
                     box.setFillColor(lightGray);
@@ -263,7 +267,7 @@ public:
             else {
 
                 //If the input box is not the active one
-                if (!isActive) {
+                if (isActive == false) {
 
                     //Fill the input box with dark gray because it is not hovered over
                     box.setFillColor(darkGray);
@@ -348,26 +352,88 @@ private:
     }
 };
 
+//Seelction Button Class
+class SelectionBox {
+public:
 
+    //Create rectangle object for the button
+    sf::RectangleShape SelectionButton;
 
+    //Constructor
+    SelectionBox(int x, string buttonString) {
+
+        //Set the size of the SelectionButton rectangle using the constant UI parameters 
+        SelectionButton.setSize(sf::Vector2f(optionTypeButtonWidth, optionTypeButtonHeight));
+
+        //Set the position of the SelectionButton using the constructor x coordinate and the constant UI parameter for the y coordinate
+        SelectionButton.setPosition(x, optionTypeButtonY);
+
+        //Set the color of the SelectionButton to dark gray
+        SelectionButton.setFillColor(darkGray);
+
+        //Set the thickness of the SelectionButton outline using constant UI parameter
+        SelectionButton.setOutlineThickness(inputBoxOutlineThickness);
+
+        //Set the outline color of the SelectionButton to black
+        SelectionButton.setOutlineColor(sf::Color::Black);
+
+        //Use the "setFont" method to set the font of this text object to arial
+        text.setFont(font);
+
+        //Set the character size of the text to 25
+        text.setCharacterSize(25);
+
+        //Set the string of the text to the buttonString constructor arg
+        text.setString(buttonString);
+
+        int textWidth = text.getLocalBounds().width;
+        int textHeight = text.getLocalBounds().height;
+
+        //Set the position of the text to the exact center of the selection button rectangle
+        text.setPosition(x + ((optionTypeButtonWidth - textWidth) / 2), optionTypeButtonY + ((optionTypeButtonHeight - textHeight) / 2)-3);
+
+        //Set the color of the text to black
+        text.setFillColor(sf::Color::Black);
+
+    }
+
+    //Method to draw the SelectionButton rectangle and its text
+    void draw(sf::RenderWindow& window) {
+
+        //Draw the selection button
+        window.draw(SelectionButton);
+
+        //Draw the button's name
+        window.draw(text);
+    }
+
+    //Method to update UI for when button is selected
+    void select() {
+
+        //Set the color and outline color of the SelectionButton to light gray and red to show it's selected 
+        SelectionButton.setFillColor(lightGray);
+        SelectionButton.setOutlineColor(sf::Color::Red);
+    }
+
+    //Method to update UI for when button is unselected
+    void unSelect() {
+
+        //Set the color and outline color of the SelectionButton to dark gray and black to show it's not selected 
+        SelectionButton.setFillColor(darkGray);
+        SelectionButton.setOutlineColor(sf::Color::Black);
+    }
+
+private:
+
+    ////Create Text object for the text of the button's name
+    sf::Text text;
+
+};
 
 
 //Main function
 int main(int argc, char* argv[])
 {
-    //Test object
-    Bachelier bachelier(200.0, 105.0, 1.0, 0.05, 0.2);
-
-    //test call and put methods
-    double callPrice = bachelier.getCallPrice();
-    double putPrice = bachelier.getPutPrice();
-
-    cout << "Call Option Price: " << callPrice << endl;
-    cout << "Put Option Price: " << putPrice << endl;
-
-
-
-
     //Create window object
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "OptionsWizard");
 
@@ -409,35 +475,6 @@ int main(int argc, char* argv[])
     int menuButtonX = (windowWidth - menuButtonWidth) / 2;
     int buttonY = 120;
 
-    //Create rectangle objects for the option type buttons
-    sf::RectangleShape callOptionButton;
-    sf::RectangleShape putOptionButton;
-
-    //Set the call option type button selected boolean to null
-    //true = call, false = put
-    bool callSelected = NULL;
-
-    //Set the size of the option type buttons as a vector with the constants width and height
-    callOptionButton.setSize(sf::Vector2f(optionTypeButtonWidth, optionTypeButtonHeight));
-    putOptionButton.setSize(sf::Vector2f(optionTypeButtonWidth, optionTypeButtonHeight));
-
-    //Set the position of the option type buttons
-    callOptionButton.setPosition(callButtonX, optionTypeButtonY);
-    putOptionButton.setPosition(putButtonX, optionTypeButtonY);
-
-    //Set the color of option type buttons to dark gray
-    callOptionButton.setFillColor(darkGray);
-    putOptionButton.setFillColor(darkGray);
-
-    //Set an outline thickness as the same as the input box outline thickness
-    callOptionButton.setOutlineThickness(inputBoxOutlineThickness);
-    putOptionButton.setOutlineThickness(inputBoxOutlineThickness);
-
-    //Set the option type buttons' outline color to black
-    callOptionButton.setOutlineColor(sf::Color::Black);
-    putOptionButton.setOutlineColor(sf::Color::Black);
-
-
     //Iterate through each model name
     for (int i = 0; i < 4; ++i) {
 
@@ -467,6 +504,10 @@ int main(int argc, char* argv[])
     //Create testInput object
     InputBox testInput(200, "Cool Label:");
 
+    //Create SelectionBox objects for the option type buttons
+    SelectionBox callOptionButton(callButtonX, "Call Option");
+    SelectionBox putOptionButton(putButtonX, "Put Option");
+
 
     //Window loop
     while (window.isOpen()) {
@@ -474,16 +515,52 @@ int main(int argc, char* argv[])
         //Event handling loop
         while (window.pollEvent(e)) {
 
-            if (e.mouseButton.button == sf::Mouse::Left) {
+            //If the mouse is pressed
+            if (e.type == sf::Event::MouseButtonPressed) {
 
-                //If the mouse click is within the bounds of the menu button
-                if (menuSprite.getGlobalBounds().contains(static_cast<int>(e.mouseButton.x), static_cast<int>(e.mouseButton.y))) {
-                    screen = 0;
+                //If the left mouse button is pressed
+                if (e.mouseButton.button == sf::Mouse::Left) {
+
+                    //If the mouse click is within the bounds of the menu button
+                    if (menuSprite.getGlobalBounds().contains(static_cast<int>(e.mouseButton.x), static_cast<int>(e.mouseButton.y))) {
+
+                        //Set the screen integer to 0
+                        screen = 0;
+                    }
+                    
+                    //If the active screen is the input screen
+                    if (screen != 0) {
+                        
+                        //If the click is within the bounds of the call option type button
+                        if (callOptionButton.SelectionButton.getGlobalBounds().contains(static_cast<int>(e.mouseButton.x), static_cast<int>(e.mouseButton.y))) {
+
+                            //Set the "callSelected" boolean to true
+                            callSelected = true;
+
+                            //Set the color and outline color of the call option button to light gray and red to show it's selected 
+                            callOptionButton.select();
+
+                            //Set the color and outline color of the put option button to dark gray and black to show it's not selected 
+                            putOptionButton.unSelect();
+
+                        }
+
+                        //If the click is within the bounds of the put option type button
+                        else if (putOptionButton.SelectionButton.getGlobalBounds().contains(static_cast<int>(e.mouseButton.x), static_cast<int>(e.mouseButton.y))) {
+
+                            //Set the "callSelected" boolean to false
+                            callSelected = false; 
+
+                            //Set the color and outline color of the put option button to light gray and red to show it's selected 
+                            putOptionButton.select();
+
+                            //Set the color and outline color of the call option button to dark gray and black to show it's not selected 
+                            callOptionButton.unSelect();
+
+                        }
+                    }
                 }
-
-
             }
-
             //If the user is trying to close the window
             if (e.type == sf::Event::Closed) {
 
@@ -536,10 +613,11 @@ int main(int argc, char* argv[])
             window.draw(inputTitles[screen - 1]);
 
             //Draw the option type buttons
-            window.draw(callOptionButton);
-            window.draw(putOptionButton);
+            callOptionButton.draw(window);
+            putOptionButton.draw(window);
         }
 
+        //Draw the menu icon
         window.draw(menuSprite);
 
         //Update the window display for this frame
